@@ -43,7 +43,7 @@ export default ({secret, cookieName = 'fusion-sess', expiresIn = 86400}) => {
         const signed = await sign(token, secret, {expiresIn});
         if (signed !== session.cookie) {
           const expires = new Date(time + expiresIn * 1000);
-          // TODO provide way to not set cookie if not needed yet
+          // TODO(#3) provide way to not set cookie if not needed yet
           ctx.cookies.set(cookieName, signed, {expires});
         }
       }
