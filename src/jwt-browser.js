@@ -1,2 +1,7 @@
-import {BasePlugin} from 'fusion-core';
-export default BasePlugin;
+export default function JWTBrowser() {
+  return {
+    from() {
+      throw new Error('Cannot call JWT.from in the browser');
+    },
+  };
+}
