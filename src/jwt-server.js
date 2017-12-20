@@ -5,7 +5,8 @@ import {createToken, createOptionalToken} from 'fusion-types';
 export const SessionSecret: string = createToken('SessionSecret');
 export const SessionCookieName: string = createToken('SessionCookieName');
 export const SessionCookieExpires: number = createOptionalToken(
-  'SessionCookieExpires'
+  'SessionCookieExpires',
+  86300
 );
 
 import {withDependencies, withMiddleware, memoize} from 'fusion-core';
