@@ -1,21 +1,23 @@
 // @flow
 /* eslint-env node */
 
-import {createToken, createOptionalToken} from 'fusion-types';
+import {createToken, createOptionalToken} from 'fusion-tokens';
+import {withDependencies, withMiddleware, memoize} from 'fusion-core';
+import type {Context, FusionPlugin} from 'fusion-core';
+
 export const SessionSecret: string = createToken('SessionSecret');
 export const SessionCookieName: string = createToken('SessionCookieName');
 export const SessionCookieExpires: number = createOptionalToken(
   'SessionCookieExpires',
-  86300
+  86400
 );
 
-import {withDependencies, withMiddleware, memoize} from 'fusion-core';
-import type {Context, FusionPlugin} from 'fusion-core';
 const assert = require('assert');
 const {promisify} = require('util');
 const jwt = require('jsonwebtoken');
 const get = require('just-safe-get');
 const set = require('just-safe-set');
+
 const verify = promisify(jwt.verify.bind(jwt));
 const sign = promisify(jwt.sign.bind(jwt));
 
@@ -75,7 +77,7 @@ const p: SessionPluginType = withDependencies({
       return new JWTSession(ctx, {secret, cookieName, expires});
     }),
   };
-  return withMiddleware(async function jwtMiddleware(
+  return withMiddleware(service, async function jwtMiddleware(
     ctx: Context,
     next: () => Promise<void>
   ) {
@@ -95,8 +97,7 @@ const p: SessionPluginType = withDependencies({
         ctx.cookies.set(cookieName, signed, {expires: msExpires});
       }
     }
-  },
-  service);
+  });
 });
 
 export default p;

@@ -2,14 +2,13 @@
 import tape from 'tape-cup';
 import App from 'fusion-core';
 import {createServer} from 'http';
-import JWTServer from '../../jwt-server';
 import fetch from 'node-fetch';
-import {createToken} from 'fusion-types';
-import {
+import {createToken} from 'fusion-tokens';
+import JWTServer, {
   SessionSecret,
   SessionCookieName,
   SessionCookieExpires,
-} from '../../jwt-server';
+} from '../jwt-server';
 
 const JWTToken = createToken(JWTServer);
 
