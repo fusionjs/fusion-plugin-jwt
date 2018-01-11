@@ -5,9 +5,9 @@ import {createToken, createOptionalToken} from 'fusion-tokens';
 import {withDependencies, withMiddleware, memoize} from 'fusion-core';
 import type {Context, FusionPlugin} from 'fusion-core';
 
-export const SessionSecret: string = createToken('SessionSecret');
-export const SessionCookieName: string = createToken('SessionCookieName');
-export const SessionCookieExpires: number = createOptionalToken(
+export const SessionSecretToken: string = createToken('SessionSecret');
+export const SessionCookieNameToken: string = createToken('SessionCookieName');
+export const SessionCookieExpiresToken: number = createOptionalToken(
   'SessionCookieExpires',
   86400
 );
@@ -67,9 +67,9 @@ class JWTSession {
 type SessionService = {from: (ctx: Context) => JWTSession};
 type SessionPluginType = FusionPlugin<JWTConfig, SessionService>;
 const p: SessionPluginType = withDependencies({
-  secret: SessionSecret,
-  cookieName: SessionCookieName,
-  expires: SessionCookieExpires,
+  secret: SessionSecretToken,
+  cookieName: SessionCookieNameToken,
+  expires: SessionCookieExpiresToken,
 })(deps => {
   const {secret, cookieName, expires} = deps;
   const service = {

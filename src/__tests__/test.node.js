@@ -5,18 +5,18 @@ import {createServer} from 'http';
 import fetch from 'node-fetch';
 import {createToken} from 'fusion-tokens';
 import JWTServer, {
-  SessionSecret,
-  SessionCookieName,
-  SessionCookieExpires,
+  SessionSecretToken,
+  SessionCookieNameToken,
+  SessionCookieExpiresToken,
 } from '../jwt-server';
 
 const JWTToken = createToken(JWTServer);
 
 tape('JWTServer', async t => {
   const app = new App('fake-element', el => el);
-  app.configure(SessionSecret, 'session-secret');
-  app.configure(SessionCookieName, 'cookie-name');
-  app.configure(SessionCookieExpires, 86300);
+  app.configure(SessionSecretToken, 'session-secret');
+  app.configure(SessionCookieNameToken, 'cookie-name');
+  app.configure(SessionCookieExpiresToken, 86300);
   app.register(JWTToken, JWTServer);
   let count = 0;
   app.middleware({Session: JWTToken}, ({Session}) => (ctx, next) => {
@@ -48,9 +48,9 @@ tape('JWTServer', async t => {
 
 tape('JWTServer with expired token', async t => {
   const app = new App('fake-element', el => el);
-  app.configure(SessionSecret, 'session-secret');
-  app.configure(SessionCookieName, 'cookie-name');
-  app.configure(SessionCookieExpires, 1);
+  app.configure(SessionSecretToken, 'session-secret');
+  app.configure(SessionCookieNameToken, 'cookie-name');
+  app.configure(SessionCookieExpiresToken, 1);
   app.register(JWTServer);
 
   let count = 0;
