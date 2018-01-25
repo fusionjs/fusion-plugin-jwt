@@ -2171,9 +2171,9 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
-flow-bin@0.63.1:
-  version "0.63.1"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.63.1.tgz#ab00067c197169a5fb5b4996c8f6927b06694828"
+flow-bin@0.64.0:
+  version "0.64.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.64.0.tgz#ddd3fb3b183ab1ab35a5d5dec9caf5ebbcded167"
 
 for-each@~0.3.2:
   version "0.3.2"
@@ -2258,9 +2258,9 @@ functional-red-black-tree@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
 
-fusion-core@0.3.0-4:
-  version "0.3.0-4"
-  resolved "https://registry.yarnpkg.com/fusion-core/-/fusion-core-0.3.0-4.tgz#d6d22d99ccaa320cfd16897519ec991a42496d04"
+fusion-core@0.3.0-5:
+  version "0.3.0-5"
+  resolved "https://registry.yarnpkg.com/fusion-core/-/fusion-core-0.3.0-5.tgz#b6ad6ea3f7dcdb6517dc31214f64856727c5800c"
   dependencies:
     koa "^2.3.0"
     koa-compose "^4.0.0"
@@ -2934,8 +2934,8 @@ jsx-ast-utils@^2.0.0:
     array-includes "^3.0.3"
 
 just-safe-get@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/just-safe-get/-/just-safe-get-1.1.0.tgz#8e7d1d88ec6f42be4363774364d5337719dec2bc"
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/just-safe-get/-/just-safe-get-1.2.0.tgz#4a94b4c4b9ca37a65e3f898f97cff79b9c44f3a3"
 
 just-safe-set@^2.0.1:
   version "2.0.1"
@@ -4440,8 +4440,8 @@ through@^2.3.6, through@~2.3.4, through@~2.3.8:
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
 
 timers-browserify@^2.0.4:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/timers-browserify/-/timers-browserify-2.0.5.tgz#04878fb12a155a159c9d1e59faa1f77bf4ecc44c"
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/timers-browserify/-/timers-browserify-2.0.6.tgz#241e76927d9ca05f4d959819022f5b3664b64bae"
   dependencies:
     setimmediate "^1.0.4"
 
