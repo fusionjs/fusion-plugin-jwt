@@ -7,13 +7,23 @@
 // @flow
 /* eslint-env node */
 
+import assert from 'assert';
+import {promisify} from 'util';
+import jwt from 'jsonwebtoken';
+import get from 'just-safe-get';
+import set from 'just-safe-set';
+
 import {createPlugin, memoize} from 'fusion-core';
 import type {Context, FusionPlugin} from 'fusion-core';
+
 import {
-  SessionCookieExpiresToken,
-  SessionCookieNameToken,
   SessionSecretToken,
-} from './tokens';
+  SessionCookieNameToken,
+  SessionCookieExpiresToken,
+} from './tokens.js';
+
+// Scope path to `data.` here since `jsonwebtoken` has some special top-level keys that we do not want to expose (ex: `exp`)
+const getFullPath = keyPath => `data.${keyPath}`;
 
 type JWTConfig = {
   secret: string,
@@ -21,9 +31,45 @@ type JWTConfig = {
   expires: number,
 };
 
+class JWTSession {
+  cookie: string;
+  token: ?Object | string;
+  config: JWTConfig;
+
+  constructor(ctx: Context, config: JWTConfig) {
+    this.config = config;
+    this.cookie = ctx.cookies.get(this.config.cookieName);
+    this.token = null;
+  }
+  async loadToken() {
+    if (this.token == null) {
+      const verify = promisify(jwt.verify.bind(jwt));
+      this.token = this.cookie
+        ? await verify(this.cookie, this.config.secret).catch(() => ({}))
+        : {};
+    }
+    return this.token;
+  }
+  get(keyPath: string) {
+    assert(
+      this.token,
+      "Cannot access token before loaded, please use this plugin before any of it's dependencies"
+    );
+    return get(this.token, getFullPath(keyPath));
+  }
+  set(keyPath: string, val: any) {
+    assert(
+      this.token,
+      "Cannot access token before loaded, please use this plugin before any of it's dependencies"
+    );
+    return set(this.token, getFullPath(keyPath), val);
+  }
+}
+
 export type SessionService = {from: (ctx: Context) => JWTSession};
 type SessionPluginType = FusionPlugin<JWTConfig, SessionService>;
 const p: SessionPluginType =
+  // $FlowFixMe
   __NODE__ &&
   createPlugin({
     deps: {
@@ -33,52 +79,6 @@ const p: SessionPluginType =
     },
     provides: deps => {
       const {secret, cookieName, expires} = deps;
-
-      const assert = require('assert');
-      const {promisify} = require('util');
-      const jwt = require('jsonwebtoken');
-      const get = require('just-safe-get');
-      const set = require('just-safe-set');
-
-      const verify = promisify(jwt.verify.bind(jwt));
-
-      // Scope path to `data.` here since `jsonwebtoken` has some special top-level keys that we do not want to expose (ex: `exp`)
-      const getFullPath = keyPath => `data.${keyPath}`;
-
-      class JWTSession {
-        cookie: string;
-        token: ?Object | string;
-        config: JWTConfig;
-
-        constructor(ctx: Context, config: JWTConfig) {
-          this.config = config;
-          this.cookie = ctx.cookies.get(this.config.cookieName);
-          this.token = null;
-        }
-        async loadToken() {
-          if (this.token == null) {
-            this.token = this.cookie
-              ? await verify(this.cookie, this.config.secret).catch(() => ({}))
-              : {};
-          }
-          return this.token;
-        }
-        get(keyPath: string) {
-          assert(
-            this.token,
-            "Cannot access token before loaded, please use this plugin before any of it's dependencies"
-          );
-          return get(this.token, getFullPath(keyPath));
-        }
-        set(keyPath: string, val: any) {
-          assert(
-            this.token,
-            "Cannot access token before loaded, please use this plugin before any of it's dependencies"
-          );
-          return set(this.token, getFullPath(keyPath), val);
-        }
-      }
-
       const service = {
         from: memoize((ctx: Context) => {
           return new JWTSession(ctx, {secret, cookieName, expires});
@@ -87,15 +87,12 @@ const p: SessionPluginType =
       return service;
     },
     middleware: (deps, service) => {
-      const {promisify} = require('util');
-      const jwt = require('jsonwebtoken');
-      const sign = promisify(jwt.sign.bind(jwt));
-
       const {secret, cookieName, expires} = deps;
       return async function jwtMiddleware(
         ctx: Context,
         next: () => Promise<void>
       ) {
+        const sign = promisify(jwt.sign.bind(jwt));
         const session = service.from(ctx);
         const token = await session.loadToken();
         await next();
