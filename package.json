@@ -39,7 +39,7 @@
     "eslint-plugin-react": "7.6.1",
     "flow-bin": "0.65.0",
     "fusion-core": "^0.3.1",
-    "fusion-tokens": "^0.0.6",
+    "fusion-tokens": "^1.0.0",
     "node-fetch": "2.0.0",
     "nyc": "11.4.1",
     "prettier": "1.10.2",
@@ -48,7 +48,7 @@
   },
   "peerDependencies": {
     "fusion-core": "^0.3.1",
-    "fusion-tokens": "^0.0.6"
+    "fusion-tokens": "^1.0.0"
   },
   "scripts": {
     "clean": "rm -rf dist",
