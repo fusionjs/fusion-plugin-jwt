@@ -100,7 +100,7 @@ const p: FusionPlugin<SessionDeps, SessionService> =
       };
       return service;
     },
-    middleware: (deps, service: SessionService) => {
+    middleware: (deps, service) => {
       const {secret, cookieName, expires = 86400} = deps;
       return async function jwtMiddleware(
         ctx: Context,
