@@ -17,7 +17,7 @@ import JWTServer, {
   SessionCookieExpiresToken,
 } from '../index';
 
-import type {SessionService} from '../jwt-server';
+import type {SessionService} from '../types.js';
 
 const JWTToken: Token<SessionService> = createToken('Session');
 
