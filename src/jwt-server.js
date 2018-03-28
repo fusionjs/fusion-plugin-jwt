@@ -60,7 +60,7 @@ class JWTSession {
     );
     return get(this.token, getFullPath(keyPath));
   }
-  set(keyPath: string, val: *): boolean {
+  set(keyPath: string, val: mixed): boolean {
     assert(
       this.token,
       "Cannot access token before loaded, please use this plugin before any of it's dependencies"
