@@ -21,6 +21,7 @@ export type SessionService = {
     loadToken(): Promise<?Object | string>,
     get(keyPath: string): mixed,
     set(keyPath: string, val: mixed): boolean,
+    cookie: string | void,
   },
 };
 
