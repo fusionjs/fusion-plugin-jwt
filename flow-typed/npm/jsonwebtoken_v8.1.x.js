@@ -1,6 +1,8 @@
 // flow-typed signature: a2d5ea66c7bcab10e48b4d9cf6fcbcb0
 // flow-typed version: 40e00ed01a/jsonwebtoken_v8.1.x/flow_>=v0.56.x
 
+/* eslint-disable */
+
 declare module "jsonwebtoken" {
   declare module.exports: {
     sign: jwt$Sign,

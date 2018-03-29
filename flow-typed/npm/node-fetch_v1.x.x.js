@@ -1,6 +1,8 @@
 // flow-typed signature: 284e255a331cbe00e3ddf88897c9452d
 // flow-typed version: 7e7beb7540/node-fetch_v1.x.x/flow_>=v0.44.x
 
+/* eslint-disable */
+
 declare module 'node-fetch' {
   declare export class Request mixins Body {
     constructor(input: string | Request, init?: RequestInit): this;
