@@ -185,5 +185,3 @@ const value: any = session.get(key: string);
 ### Caveats
 
 Note that there's a storage limit of ~4kb since data is stored in the cookie.
-
-.
