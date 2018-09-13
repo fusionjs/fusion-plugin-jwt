@@ -57,10 +57,10 @@ class JWTSession {
       this.token,
       "Cannot access token before loaded, please use this plugin before any of it's dependencies"
     );
-    if (datPath === '') {
+    if (dataPath === '') {
       return get(this.token, keyPath);
     } else {
-      return get(this.token, getFullPath(keyPath));
+      return get(this.token, getFullPath(keyPath, dataPath));
     }
 
   }
@@ -69,7 +69,7 @@ class JWTSession {
       this.token,
       "Cannot access token before loaded, please use this plugin before any of it's dependencies"
     );
-    if (datPath === '') {
+    if (dataPath === '') {
       return set(this.token, keyPath, val);
     } else {
       return set(this.token, getFullPath(keyPath, dataPath), val);
