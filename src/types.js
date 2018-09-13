@@ -19,8 +19,8 @@ export type SessionService = {
     ctx: Context
   ): {
     loadToken(): Promise<?Object | string>,
-    get(keyPath: string): mixed,
-    set(keyPath: string, val: mixed): boolean,
+    get(keyPath: string, dataPath: string.optional): mixed,
+    set(keyPath: string, val: mixed, dataPath: string.optional): boolean,
     cookie: string | void,
   },
 };
