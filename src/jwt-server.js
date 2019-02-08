@@ -21,11 +21,9 @@ import {
   SessionSecretToken,
   SessionCookieNameToken,
   SessionCookieExpiresToken,
+  GetFullPathToken,
 } from './tokens.js';
 import type {SessionDeps, SessionService} from './types.js';
-
-// Scope path to `data.` here since `jsonwebtoken` has some special top-level keys that we do not want to expose (ex: `exp`)
-const getFullPath = keyPath => `data.${keyPath}`;
 
 type JWTConfig = {
   secret: string,
@@ -37,11 +35,13 @@ class JWTSession {
   cookie: string | void;
   token: ?Object | string;
   config: JWTConfig;
+  getFullPath: string => string;
 
-  constructor(ctx: Context, config: JWTConfig) {
+  constructor(ctx: Context, config: JWTConfig, getFullPath: string => string) {
     this.config = config;
     this.cookie = ctx.cookies.get(this.config.cookieName);
     this.token = null;
+    this.getFullPath = getFullPath
   }
   async loadToken() {
     if (this.token == null) {
@@ -57,14 +57,14 @@ class JWTSession {
       this.token,
       "Cannot access token before loaded, please use this plugin before any of it's dependencies"
     );
-    return get(this.token, getFullPath(keyPath));
+    return get(this.token, this.getFullPath(keyPath));
   }
   set(keyPath: string, val: mixed): boolean {
     assert(
       this.token,
       "Cannot access token before loaded, please use this plugin before any of it's dependencies"
     );
-    return set(this.token, getFullPath(keyPath), val);
+    return set(this.token, this.getFullPath(keyPath), val);
   }
 }
 
@@ -76,12 +76,13 @@ const p: FusionPlugin<SessionDeps, SessionService> =
       secret: SessionSecretToken,
       cookieName: SessionCookieNameToken,
       expires: SessionCookieExpiresToken.optional,
+      getFullPath: GetFullPathToken.optional,
     },
     provides: deps => {
-      const {secret, cookieName, expires = 86400} = deps;
+      const {secret, cookieName, expires = 86400, getFullPath = (ctx: Context) => keyPath => `data.${keyPath}`} = deps;
       const service: SessionService = {
         from: memoize((ctx: Context) => {
-          return new JWTSession(ctx, {secret, cookieName, expires});
+          return new JWTSession(ctx, {secret, cookieName, expires, getFullPath(ctx)});
         }),
       };
       return service;
