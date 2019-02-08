@@ -25,7 +25,7 @@ import {
 import type {SessionDeps, SessionService} from './types.js';
 
 // Scope path to `data.` here since `jsonwebtoken` has some special top-level keys that we do not want to expose (ex: `exp`)
-const getFullPath = keyPath => `data.${keyPath}`;
+const getFullPath = (keyPath, dataPath) => `${dataPath}.${keyPath}`;
 
 type JWTConfig = {
   secret: string,
@@ -52,19 +52,29 @@ class JWTSession {
     }
     return this.token;
   }
-  get(keyPath: string): mixed {
+  get(keyPath: string, dataPath: string = ''): mixed {
     assert(
       this.token,
       "Cannot access token before loaded, please use this plugin before any of it's dependencies"
     );
-    return get(this.token, getFullPath(keyPath));
+    if (dataPath === '') {
+      return get(this.token, keyPath);
+    } else {
+      return get(this.token, getFullPath(keyPath, dataPath));
+    }
+
   }
-  set(keyPath: string, val: mixed): boolean {
+  set(keyPath: string, val: mixed, dataPath: string = ''): boolean {
     assert(
       this.token,
       "Cannot access token before loaded, please use this plugin before any of it's dependencies"
     );
-    return set(this.token, getFullPath(keyPath), val);
+    if (dataPath === '') {
+      return set(this.token, keyPath, val);
+    } else {
+      return set(this.token, getFullPath(keyPath, dataPath), val);
+    }
+    
   }
 }
 
